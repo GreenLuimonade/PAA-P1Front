@@ -1,0 +1,46 @@
+<head>
+    <script>        
+    function sendMessage() {
+        var message = document.getElementById('messageInput').value;
+
+        fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(message)
+        }).then(response => {
+            if (response.ok) {
+                alert('Message sent successfully');
+                loadLastMessage();
+            } else {
+                alert('Failed to send message');
+            }
+        });
+    }
+
+    function loadLastMessage() {
+        fetch('/api/messages/latest')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('lastMessage').textContent = data.content;
+            });
+    }
+
+    // Load the latest message when the page loads
+    window.onload = loadLastMessage;
+</script>
+
+</head>
+<body>
+    <script type="text/javascript" scr="function.js"></script>
+    <h1>Send a Message</h1>
+    <input type="text" id="messageInput" placeholder="Enter your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <h2>Last Message:</h2>
+    <div id="lastMessage"></div>
+
+    
+</body>
+</html>
